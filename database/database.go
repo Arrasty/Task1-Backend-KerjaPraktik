@@ -13,11 +13,12 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-// struct instance
+// struct Dbinstance
 type Dbinstance struct {
 	Db *gorm.DB //
 }
 
+// Variabel DB untuk simpan instance Dbinstance sehingga dapat diakses dari berbagai file.
 var DB Dbinstance
 
 // Connect function

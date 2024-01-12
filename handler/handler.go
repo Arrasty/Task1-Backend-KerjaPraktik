@@ -41,7 +41,7 @@ func GetAllUsers(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{"status": "sucess", "message": "Users Found", "data": users})
 }
 
-// GetSingleUser dari database
+// GetSingleUser dari database bedasarkan id
 func GetSingleUser(c *fiber.Ctx) error {
 	db := database.DB.Db
 	// get id dari parameter
@@ -56,10 +56,26 @@ func GetSingleUser(c *fiber.Ctx) error {
 	return c.Status(200).JSON(fiber.Map{"status": "success", "message": "User Found", "data": user})
 }
 
+// GetSingleUser dari database bedasarkan id
+func GetSingleUserByNim(c *fiber.Ctx) error {
+	db := database.DB.Db
+	// get id dari parameter
+	nim := c.Params("nim")
+	var user model.User // user sebagai objek model user yang menampung data
+
+	// find single user in the database by id
+	db.Find(&user, "nim = ?", nim)
+	if user.NIM == 0 {
+		return c.Status(404).JSON(fiber.Map{"status": "error bang", "message": "User not found", "data": nil})
+	}
+	return c.Status(200).JSON(fiber.Map{"status": "success", "message": "User Found", "data": user})
+}
+
 // update a user in db
 func UpdateUser(c *fiber.Ctx) error {
 	type updateUser struct {
 		Nama     string  `json:"nama"`
+		NIM      int     `json:"nim"`
 		Email    string  `json:"email"`
 		Alamat   string  `json:"alamat"`
 		Jurusan  string  `json:"jurusan"`
@@ -89,6 +105,9 @@ func UpdateUser(c *fiber.Ctx) error {
 	// Update tiap fields
 	if updateUserData.Nama != "" {
 		user.Nama = updateUserData.Nama
+	}
+	if updateUserData.NIM != 0 {
+		user.NIM = updateUserData.NIM
 	}
 	if updateUserData.Email != "" {
 		user.Email = updateUserData.Email

@@ -10,6 +10,7 @@ type User struct {
 	//gorm.Model
 	ID       uuid.UUID `gorm:"type:uuid;"`
 	Nama     string    `json:"nama"`
+	NIM      int       `json:"nim"`
 	Email    string    `json:"email"`
 	Alamat   string    `json:"alamat"`
 	Jurusan  string    `json:"jurusan"`
